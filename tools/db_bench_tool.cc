@@ -472,6 +472,8 @@ DEFINE_int32(user_timestamp_size, 0,
 DEFINE_int32(num_multi_db, 0,
              "Number of DBs used in the benchmark. 0 means single DB.");
 
+DEFINE_bool(write_multi_db_inorder, false, "write to multiple DBs in order");
+
 DEFINE_string(dbs_to_use, "",
               "A comma-separated list of indices of the DBs to actually use in "
               "the benchmark "
@@ -5641,7 +5643,7 @@ class Benchmark {
         }
       }
 
-      if (write_mode != SEQUENTIAL) {
+      if (write_mode != SEQUENTIAL && !FLAG_write_multi_db_inorder) {
         id = thread->rand.Next() % num_key_gens;
       } else {
         // When doing a sequential load with multiple databases, load them in
